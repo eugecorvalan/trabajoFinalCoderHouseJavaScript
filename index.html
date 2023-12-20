@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inmobiliaria Corvalan</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="menuContainer">
+            <a href="#" class="logo">bienes raices corvalán</a>
+            <input type="checkbox" id="menu" />
+            <label for="menu">
+                <img src="images/menuHamburguesa.jpeg" class="menu-icono" alt="menu">
+            </label>    
+            <nav class="navbar">
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Sobre Nosotros</a></li>
+                    <li><a href="#">Contacto</a></li>
+                </ul>
+            </nav>
+            <div>
+                <ul>
+                    <li class="menuCarrito">
+                        <img src="images/carritoRosa.jpeg"  id="imgCarrito" alt="carrito de compras">
+                        <div id="carrito">
+                            <table id="listaCarrito">
+                                <thead>
+                                    <tr>
+                                        <th>imagen</th>
+                                        <th>nombre</th>
+                                        <th>precio</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <a href="#" id="vaciarCarrito" class="btn-2" >Vaciar carrito</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="headerContent container">
+            <div class="headerImg">
+                <img src="images/imgPrincipal.webp" alt="imagen casa con pileta">
+            </div>
+            <div class="headerTxt">
+                <h1>Tu proximo loft <br> te espera</h1>
+                <a href="#" class="btn-1"> Mas informacion</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="destacadasContainer">
+        <div class="destacadaUno">
+            <div class="destacadasImg">
+                <img src="images/loft1.webp" alt="loft">
+            </div>
+            <div class="destacadasTxt" >
+                <h3>Loft 1</h3>
+                <a href="#" class="btn-2" >Mas info</a>
+            </div>
+        </div>
+
+        <div class="destacadaUno">
+            <div class="destacadasImg">
+                <img src="images/loft2.webp" alt="loft">
+            </div>
+            <div class="destacadasTxt" >
+                <h3>Loft 2</h3>
+                <a href="#" class="btn-2" >Mas info</a>
+            </div>
+        </div>
+
+        <div class="destacadaUno">
+            <div class="destacadasImg">
+                <img src="images/loft3.webp" alt="loft">
+            </div>
+            <div class="destacadasTxt" >
+                <h3>Loft 3</h3>
+                <a href="#" class="btn-2" >Mas info</a>
+            </div>
+        </div>
+    </section>
+
+    <script src="main.js"></script>
+</body> 
+</html>
