@@ -163,27 +163,6 @@ cargarLoft();
 
 function actualizoLoftAgregar() {
     loftAgregar = document.querySelectorAll(".loftAgregar");
-
-    loftAgregar.forEach(loft => {
-        loft.addEventListener("click",agregarAlCarrito);
-    })
 }
 
-const loftEnCarrito = [];
 
-function agregarAlCarrito(e) {
-    const idLoft = e.currentTarget.id;
-    const loftAgregado = loft.find(loft => loft.id === idBoton);
-
-    if(loftEnCarrito.some(loft.id ===idBoton)) {
-        const index = loftEnCarrito.findIndex(loft => loft.id === idBoton);
-        loftEnCarrito[index].cantidad++;
-
-    } else{
-        loftAgregado.cantidad = 1;
-        loftEnCarrito.push(loftAgregado);
-    }
-
-    localStorage.setItem("loft-en-carrito", JSON.stringify(loftEnCarrito));
-
- }
