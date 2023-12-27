@@ -139,6 +139,14 @@ const loft = [
 const contenedorLoft = document.querySelector("#contenedor-loft");
 let loftAgregar = document.querySelectorAll(".loftAgregar");
 
+
+
+
+
+
+
+
+
 function cargarLoft() {
     loft.forEach(loft => {
         const div = document.createElement("div");
@@ -156,34 +164,107 @@ function cargarLoft() {
 
     })
 
-    actualizoLoftAgregar();
+   // actualizoLoftAgregar();
 }
 
 cargarLoft();
 
-function actualizoLoftAgregar() {
-    loftAgregar = document.querySelectorAll(".loftAgregar");
+//function actualizoLoftAgregar() {
+  //  loftAgregar = document.querySelectorAll(".loftAgregar");
 
-    loftAgregar.forEach(loft => {
-        loft.addEventListener("click",agregarAlCarrito);
-    })
-}
+    //loftAgregar.forEach(loft => {
+    //    loft.addEventListener("click",agregarAlCarrito);
+   // })
+//}
 
-const loftEnCarrito = [];
 
-function agregarAlCarrito(e) {
-    const idLoft = e.currentTarget.id;
-    const loftAgregado = loft.find(loft => loft.id === idBoton);
+//function actualizoLoftAgregar() {
+    // Using event delegation to handle dynamically added elements
+ //   contenedorLoft.addEventListener("click", function (e) {
+ //       if (e.target.classList.contains("loftAgregar")) {
+   //         agregarAlCarrito(e);
+     //   }
+  //  });
+//}
 
-    if(loftEnCarrito.some(loft.id ===idBoton)) {
-        const index = loftEnCarrito.findIndex(loft => loft.id === idBoton);
-        loftEnCarrito[index].cantidad++;
+//const loftEnCarrito = [];
 
-    } else{
-        loftAgregado.cantidad = 1;
-        loftEnCarrito.push(loftAgregado);
+//function agregarAlCarrito(e) {
+  //  const idLoft = e.currentTarget.id;
+    //const loftAgregado = loft.find(loft => loft.id === idLoft);
+
+   // if(loftEnCarrito.some(loft=> loft.id === loftAgregar)) {
+    //    const index = loftEnCarrito.findIndex(loft => loft.id === idLoft);
+      //  loftEnCarrito[index].cantidad++;
+
+   // } else{
+  //      loftAgregado.cantidad = 1;
+    //    loftEnCarrito.push(loftAgregado);
+    //}
+
+    //localStorage.setItem("loftEnCarrito", JSON.stringify(loftEnCarrito));
+
+ //}
+
+ //function agregarAlCarrito(e) {
+   // const idLoft = e.target.id;  // Use e.target.id instead of e.currentTarget.id
+   // const loftAgregado = loft.find(loft => loft.id === idLoft);
+
+   // if (loftEnCarrito.some(item => item.id === idLoft)) {
+     //   const index = loftEnCarrito.findIndex(item => item.id === idLoft);
+       // loftEnCarrito[index].cantidad++;
+   // } else {
+     //   const newLoftAgregado ={ ... loftAgregado, cantidad: 1 };
+       // loftEnCarrito.push(newLoftAgregado);
+    //}
+
+   // localStorage.setItem("loftEnCarrito", JSON.stringify(loftEnCarrito));
+//}
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    var botonesAgregar = document.querySelectorAll('.loftAgregar');
+    var listaCarrito = document.getElementById('listaCarrito');
+    var vaciarCarritoBtn = document.getElementById('vaciarCarrito');
+
+    var carrito = [];
+
+    botonesAgregar.forEach(function (boton) {
+        boton.addEventListener('click', function () {
+            var nombre = boton.getAttribute('data-nombre');
+            var precio = boton.getAttribute('data-precio');
+            agregarAlCarrito(nombre, precio);
+            actualizarTabla();
+        });
+    });
+
+
+    function agregarAlCarrito(nombre, precio) {
+        carrito.push({ nombre: nombre, precio: precio });
     }
 
-    localStorage.setItem("loft-en-carrito", JSON.stringify(loftEnCarrito));
+    function actualizarTabla() {
+        var tbody = listaCarrito.querySelector('tbody');
+        tbody.innerHTML = '';
 
- }
+        carrito.forEach(function (producto) {
+            var fila = tbody.insertRow();
+            fila.innerHTML = '<td>imagen</td><td>' + producto.nombre + '</td><td>' + producto.precio + '</td><td><a href="#" class="btn-eliminar">Eliminar</a></td>';
+
+            var btnEliminar = fila.querySelector('.btn-eliminar');
+            btnEliminar.addEventListener('click', function () {
+                carrito = carrito.filter(function (item) {
+                    return item.nombre !== producto.nombre;
+                });
+                actualizarTabla();
+            });
+        });
+    }
+
+    vaciarCarritoBtn.addEventListener('click', function () {
+        carrito = [];
+        actualizarTabla();
+    });
+});
+   

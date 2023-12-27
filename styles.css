@@ -246,7 +246,7 @@ MAIN
 .contenedorLoft{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    
+ 
    
 }
 
@@ -255,10 +255,13 @@ MAIN
     justify-content: center;
     color: #111111;
     background-color:#ffffff ;
+
 }
 
 .loft{
     margin: 2%;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.5);
+    padding-bottom: 30px;
 }
 .carritoLofts{
     display: grid;
