@@ -134,137 +134,114 @@ const loft = [
     }
     
     
-]
+];
 
 const contenedorLoft = document.querySelector("#contenedor-loft");
-let loftAgregar = document.querySelectorAll(".loftAgregar");
+//let loftAgregar = document.querySelectorAll(".loftAgregar");
 
 
-
-
-
-
-
-
+let carrito = JSON.parse(localStorage.getItem('loftEnCarrito')) || [];
+const listaCarrito = document.getElementById('listaCarrito');
+const vaciarCarritoBtn = document.getElementById('vaciarCarrito');
 
 function cargarLoft() {
-    loft.forEach(loft => {
+    loft.forEach(item => {
         const div = document.createElement("div");
         div.classList.add("loft");
         div.innerHTML = `
-            <img class="loftImagen" src=${loft.imagen} alt="${loft.titulo}">
-             <div class="loftDetalles">
-            <h3 class="loftTitulo">${loft.titulo}</h3>
-           <p class="loftPrecio" >${loft.precio}</p>
-             <button class="loftAgregar" id="${loft.id}" >Agregar</button>
-         </div>
+            <img class="loftImagen" src=${item.imagen} alt="${item.titulo}">
+            <div class="loftDetalles">
+                <h3 class="loftTitulo">${item.titulo}</h3>
+                <p class="loftPrecio">${item.precio.toLocaleString('es-AR', { style: 'currency', currency: 'USD' })}</p>
+                <button class="loftAgregar" data-nombre="${item.titulo}" data-precio="${item.precio}" data-imagen="${item.imagen}">Agregar</button>
+            </div>
         `;
 
         contenedorLoft.append(div);
-
-    })
-
-   // actualizoLoftAgregar();
+    });
 }
 
-cargarLoft();
-
-//function actualizoLoftAgregar() {
-  //  loftAgregar = document.querySelectorAll(".loftAgregar");
-
-    //loftAgregar.forEach(loft => {
-    //    loft.addEventListener("click",agregarAlCarrito);
-   // })
-//}
-
-
-//function actualizoLoftAgregar() {
-    // Using event delegation to handle dynamically added elements
- //   contenedorLoft.addEventListener("click", function (e) {
- //       if (e.target.classList.contains("loftAgregar")) {
-   //         agregarAlCarrito(e);
-     //   }
-  //  });
-//}
-
-//const loftEnCarrito = [];
-
-//function agregarAlCarrito(e) {
-  //  const idLoft = e.currentTarget.id;
-    //const loftAgregado = loft.find(loft => loft.id === idLoft);
-
-   // if(loftEnCarrito.some(loft=> loft.id === loftAgregar)) {
-    //    const index = loftEnCarrito.findIndex(loft => loft.id === idLoft);
-      //  loftEnCarrito[index].cantidad++;
-
-   // } else{
-  //      loftAgregado.cantidad = 1;
-    //    loftEnCarrito.push(loftAgregado);
-    //}
-
-    //localStorage.setItem("loftEnCarrito", JSON.stringify(loftEnCarrito));
-
- //}
-
- //function agregarAlCarrito(e) {
-   // const idLoft = e.target.id;  // Use e.target.id instead of e.currentTarget.id
-   // const loftAgregado = loft.find(loft => loft.id === idLoft);
-
-   // if (loftEnCarrito.some(item => item.id === idLoft)) {
-     //   const index = loftEnCarrito.findIndex(item => item.id === idLoft);
-       // loftEnCarrito[index].cantidad++;
-   // } else {
-     //   const newLoftAgregado ={ ... loftAgregado, cantidad: 1 };
-       // loftEnCarrito.push(newLoftAgregado);
-    //}
-
-   // localStorage.setItem("loftEnCarrito", JSON.stringify(loftEnCarrito));
-//}
-
-
-
-document.addEventListener('DOMContentLoaded', function () {
-    var botonesAgregar = document.querySelectorAll('.loftAgregar');
-    var listaCarrito = document.getElementById('listaCarrito');
-    var vaciarCarritoBtn = document.getElementById('vaciarCarrito');
-
-    var carrito = [];
-
-    botonesAgregar.forEach(function (boton) {
-        boton.addEventListener('click', function () {
-            var nombre = boton.getAttribute('data-nombre');
-            var precio = boton.getAttribute('data-precio');
-            agregarAlCarrito(nombre, precio);
-            actualizarTabla();
-        });
-    });
-
-
-    function agregarAlCarrito(nombre, precio) {
-        carrito.push({ nombre: nombre, precio: precio });
+function agregarAlCarrito(nombre, precio, imagen) {
+    // Verificar si el producto ya está en el carrito
+    const productoExistente = carrito.find(item => item.nombre === nombre);
+    
+    if (productoExistente) {
+        // Si existe, incrementar la cantidad
+        productoExistente.cantidad = (productoExistente.cantidad || 1) + 1;
+    } else {
+        // Si no existe, agregarlo al carrito
+        carrito.push({ nombre: nombre, precio: precio, imagen: imagen, cantidad: 1 });
     }
 
-    function actualizarTabla() {
-        var tbody = listaCarrito.querySelector('tbody');
-        tbody.innerHTML = '';
+    // Actualizar el carrito en localStorage
+    localStorage.setItem('loftEnCarrito', JSON.stringify(carrito));
 
-        carrito.forEach(function (producto) {
-            var fila = tbody.insertRow();
-            fila.innerHTML = '<td>imagen</td><td>' + producto.nombre + '</td><td>' + producto.precio + '</td><td><a href="#" class="btn-eliminar">Eliminar</a></td>';
+    Swal.fire(
+        {
+            icon: 'success',
+            title: 'Agregado al carrito',
+            text: `${nombre} se ha agregado al carrito`,
 
-            var btnEliminar = fila.querySelector('.btn-eliminar');
-            btnEliminar.addEventListener('click', function () {
+        }
+    );
+    actualizarTabla();
+}
+
+function actualizarTabla() {
+    var tbody = listaCarrito.querySelector('tbody');
+    tbody.innerHTML = '';
+
+    carrito.forEach(function (producto) {
+        var fila = tbody.insertRow();
+        fila.innerHTML = `<td><img src="${producto.imagen}" alt="${producto.nombre}"></td><td>${producto.nombre}</td><td>${producto.precio}</td><td>${producto.cantidad}</td><td><a href="#" class="btn-eliminar">Eliminar</a></td>`;
+
+        var btnEliminar = fila.querySelector('.btn-eliminar');
+        btnEliminar.addEventListener('click', function () {
+            // Decrementar la cantidad o eliminar el producto si la cantidad es 1
+            if (producto.cantidad && producto.cantidad > 1) {
+                producto.cantidad--;
+            } else {
                 carrito = carrito.filter(function (item) {
                     return item.nombre !== producto.nombre;
                 });
-                actualizarTabla();
-            });
-        });
-    }
+            }
 
-    vaciarCarritoBtn.addEventListener('click', function () {
-        carrito = [];
-        actualizarTabla();
+            // Actualizar el carrito en localStorage
+            localStorage.setItem('loftEnCarrito', JSON.stringify(carrito));
+            Swal.fire({
+                icon: 'success',
+                title: 'Eliminado del carrito',
+                text: `${producto.nombre} se ha eliminado del carrito.`,
+            });
+
+           
+            actualizarTabla();
+        });
     });
+}
+
+vaciarCarritoBtn.addEventListener('click', function () {
+    carrito = [];
+    localStorage.removeItem('loftEnCarrito');
+    actualizarTabla();
 });
-   
+
+// Cargar el loft y actualizar los botonesAgregar después de que el DOM está completamente cargado
+document.addEventListener('DOMContentLoaded', function () {
+    cargarLoft();
+    
+    // Agregar eventos de clic a los botones de agregar solo una vez
+    contenedorLoft.addEventListener('click', function (event) {
+        if (event.target.classList.contains('loftAgregar')) {
+            var nombre = event.target.getAttribute('data-nombre');
+            var precio = event.target.getAttribute('data-precio');
+            var imagen = event.target.getAttribute('data-imagen');
+            agregarAlCarrito(nombre, precio, imagen);
+            actualizarTabla();
+        }
+    });
+    
+    actualizarTabla();
+});
+
+
